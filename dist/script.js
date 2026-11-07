@@ -44,20 +44,12 @@ function notify(message) {
   toastTimeout = setTimeout(() => toast.classList.remove('visible'), 4500);
 }
 document.querySelector('#share-campaign').addEventListener('click', async () => {
-  const url = location.protocol === 'file:' ? '' : `${location.origin}${location.pathname}`;
-  const text = 'Pequenas atitudes. Grandes possibilidades. Conheça o Doando Sorrisos, uma campanha solidária em apoio à EMEB Sociólogo Herbert de Souza, em Diadema.';
+  const url = 'https://doando-sorrisos.vercel.app/';
   try {
-    if (navigator.share && url) await navigator.share({ title: 'Doando Sorrisos', text, url });
-    else if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(`${text}${url ? `\n${url}` : ''}`);
-      notify('Campanha copiada! Compartilhe com quem pode ajudar.');
-    } else {
-      const blob = new Blob([`${text}${url ? `\n${url}` : ''}`], { type: 'text/plain;charset=utf-8' });
-      download(blob, 'compartilhe-doando-sorrisos.txt');
-      notify('Texto da campanha preparado para compartilhar.');
-    }
-  } catch (error) {
-    if (error.name !== 'AbortError') notify('Não foi possível compartilhar. Você pode copiar o endereço desta página.');
+    await navigator.clipboard.writeText(url);
+    notify('Link copiado! Compartilhe com quem pode ajudar.');
+  } catch {
+    window.prompt('Copie o link para compartilhar a campanha:', url);
   }
 });
 const dialog = document.querySelector('#participation-dialog');
